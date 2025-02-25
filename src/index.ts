@@ -20,11 +20,12 @@ app.use(cors(config.cors));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Request logging middleware
+// Log all requests
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.path}`, {
     headers: req.headers,
-    body: req.body
+    query: req.query,
+    body: req.method === 'POST' ? req.body : undefined
   });
   next();
 });
@@ -32,14 +33,13 @@ app.use((req, res, next) => {
 // Pre-flight requests
 app.options('*', cors(config.cors));
 
-// Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  logger.error('Global error handler:', err);
-  res.status(500).json({
-    error: 'Internal server error',
-    message: err.message || 'Unknown error occurred'
+// Basic root route for testing
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    message: 'SWT Labs API is running',
+    timestamp: new Date().toISOString()
   });
-  next();
 });
 
 // Routes
