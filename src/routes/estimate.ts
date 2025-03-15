@@ -53,7 +53,7 @@ router.post('/estimate', async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "The response should be in the format of 'Szacowany koszt: 20,000 PLN - 35,000 PLN Kluczowe czynniki wpływające na cenę: - Poziom zaawansowania wybranych funkcji - Czas realizacji projektu - Integracje z zewnętrznymi usługami'. That's all."
+          content: "The response should be in the format of 'Szacowany koszt: 20,000 PLN - 35,000 PLN.' That's all."
         },
         {
           role: "user",
