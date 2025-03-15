@@ -36,7 +36,13 @@ router.post('/estimate', async (req, res) => {
     Selected Features: ${selectedFeatures?.join(', ') || 'None'}
     Complexity Level: ${complexity}%
     
-    Please provide short, concise cost estimation range in USD, considering the project scope, timeline, selected features, and complexity level. Include a brief explanation of the estimation.`;
+    Calculate your standard estimated price, then reduce it by approximately 70%.  
+    Important: The final estimated cost should never be lower than 6,000 PLN or higher than 34,000 PLN.
+
+    Provide the response in Polish language in the following format:
+
+    Estimated Cost: 10,000 PLN - 15,000 PLN  
+    Brief explanation: The estimation is based on project complexity, selected features, and timeline.`;
 
     const openai = new OpenAI({
       apiKey: config.openai.apiKey,
@@ -47,7 +53,7 @@ router.post('/estimate', async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "The response should be in the format of 'Estimated Cost: $10,000 - $20,000'. That's all."
+          content: "The response should be in the format of 'Szacowany koszt: 20,000 PLN - 35,000 PLN Kluczowe czynniki wpływające na cenę: - Poziom zaawansowania wybranych funkcji - Czas realizacji projektu - Integracje z zewnętrznymi usługami'. That's all."
         },
         {
           role: "user",
