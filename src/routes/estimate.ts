@@ -29,19 +29,7 @@ router.post('/estimate', async (req, res) => {
       features: selectedFeatures?.length || 0
     });
 
-    // Save email to Supabase if provided
-    if (email) {
-      saveEmailToSupabase({
-        email,
-        project_name: projectName,
-        project_type: projectType,
-        features: selectedFeatures,
-        complexity
-      }).catch(error => {
-        // Just log the error but don't fail the request
-        logger.error('Failed to save email to Supabase:', error);
-      });
-    }
+    // Note: Email will be saved after estimation is generated
 
     const prompt = `Please provide a project cost estimation for the following software project:
     Project Name: ${projectName}
@@ -82,6 +70,21 @@ router.post('/estimate', async (req, res) => {
     const estimation = completion.choices[0].message.content;
     logger.info('Generated estimation:', estimation);
     
+    // Save email and estimation result to Supabase if provided
+    if (email && !res.headersSent) {
+      saveEmailToSupabase({
+        email,
+        project_name: projectName,
+        project_type: projectType,
+        features: selectedFeatures,
+        complexity,
+        estimation_result: estimation || undefined
+      }).catch(error => {
+        // Just log the error but don't fail the request
+        logger.error('Failed to save email and estimation to Supabase:', error);
+      });
+    }
+    
     res.json({ estimation } as EstimationResponse);
   } catch (error) {
     logger.error('Error processing estimation:', error);
@@ -113,7 +116,7 @@ router.post('/estimate', async (req, res) => {
 // Add new API route for just saving emails
 router.post('/subscribe', async (req, res) => {
   try {
-    const { email, projectName, projectType, selectedFeatures, complexity } = req.body;
+    const { email, projectName, projectType, selectedFeatures, complexity, estimationResult } = req.body;
     
     // Validate email
     if (!email || typeof email !== 'string' || !email.includes('@')) {
@@ -129,7 +132,8 @@ router.post('/subscribe', async (req, res) => {
       project_name: projectName || 'No project name',
       project_type: projectType || 'No project type',
       features: selectedFeatures || [],
-      complexity: complexity || 0
+      complexity: complexity || 0,
+      estimation_result: estimationResult
     });
     
     if (success) {

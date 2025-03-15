@@ -20,6 +20,7 @@ interface EmailEntry {
   project_type: string;
   features?: string[];
   complexity?: number;
+  estimation_result?: string;
   created_at?: string;
 }
 
@@ -42,6 +43,7 @@ export const saveEmailToSupabase = async (data: EmailEntry): Promise<boolean> =>
           project_type: data.project_type,
           features: data.features,
           complexity: data.complexity,
+          estimation_result: data.estimation_result,
           created_at: new Date().toISOString()
         }
       ]);

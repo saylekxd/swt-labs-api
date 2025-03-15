@@ -41,6 +41,7 @@ This service integrates with Supabase to store user emails. To set up:
    - `project_type`: varchar (nullable)
    - `features`: jsonb (nullable)
    - `complexity`: integer (nullable)
+   - `estimation_result`: text (nullable)
    - `created_at`: timestamp with timezone (defaulted to `now()`)
 
 3. Add the following environment variables to your `.env` file:
