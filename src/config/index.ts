@@ -20,12 +20,27 @@ export const config = {
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
     credentials: true
-  } satisfies CorsOptions
+  } satisfies CorsOptions,
+  supabase: {
+    url: process.env.SUPABASE_URL || '',
+    key: process.env.SUPABASE_ANON_KEY || '',
+    emailsTable: process.env.SUPABASE_EMAILS_TABLE || 'user_emails'
+  }
 };
 
 // Validate required configuration
 export const validateConfig = () => {
   if (!config.openai.apiKey) {
     throw new Error('OpenAI API key is not configured');
+  }
+  
+  // Only validate Supabase config if in production to avoid breaking local dev
+  if (process.env.NODE_ENV === 'production') {
+    if (!config.supabase.url) {
+      throw new Error('Supabase URL is not configured');
+    }
+    if (!config.supabase.key) {
+      throw new Error('Supabase Anon Key is not configured');
+    }
   }
 }; 

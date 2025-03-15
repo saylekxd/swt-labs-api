@@ -46,6 +46,24 @@ app.get('/', (req, res) => {
 app.use('/api', healthRoutes);
 app.use('/api', estimateRoutes);
 
+// Handle 404
+app.use((req, res) => {
+  res.status(404).json({
+    status: 'error',
+    message: `Route not found: ${req.method} ${req.originalUrl}`
+  });
+});
+
+// Handle errors
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  logger.error('Unhandled error:', err);
+  res.status(500).json({
+    status: 'error',
+    message: err.message || 'Internal server error'
+  });
+});
+
 // Start server
 app.listen(config.port, () => {
   logger.info(`🚀 Server running on port ${config.port}`);

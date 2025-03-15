@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { OpenAI } from 'openai';
 import { config } from '../config';
 import { logger } from '../utils/logger';
+import { saveEmailToSupabase } from '../utils/supabase';
 import type { EstimationRequest, EstimationResponse, ErrorResponse } from '../types';
 
 const router = Router();
@@ -10,7 +11,7 @@ router.post('/estimate', async (req, res) => {
   logger.info('Received estimation request');
   
   try {
-    const { projectName, description, timeline, selectedFeatures, projectType, complexity } = req.body as EstimationRequest;
+    const { projectName, description, timeline, selectedFeatures, projectType, complexity, email } = req.body as EstimationRequest;
 
     // Validate required fields
     if (!projectName || !description || !timeline || !projectType) {
@@ -27,6 +28,20 @@ router.post('/estimate', async (req, res) => {
       complexity,
       features: selectedFeatures?.length || 0
     });
+
+    // Save email to Supabase if provided
+    if (email) {
+      saveEmailToSupabase({
+        email,
+        project_name: projectName,
+        project_type: projectType,
+        features: selectedFeatures,
+        complexity
+      }).catch(error => {
+        // Just log the error but don't fail the request
+        logger.error('Failed to save email to Supabase:', error);
+      });
+    }
 
     const prompt = `Please provide a project cost estimation for the following software project:
     Project Name: ${projectName}
@@ -90,6 +105,48 @@ router.post('/estimate', async (req, res) => {
 
     res.status(500).json({ 
       error: 'Failed to generate estimation',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    } as ErrorResponse);
+  }
+});
+
+// Add new API route for just saving emails
+router.post('/subscribe', async (req, res) => {
+  try {
+    const { email, projectName, projectType, selectedFeatures, complexity } = req.body;
+    
+    // Validate email
+    if (!email || typeof email !== 'string' || !email.includes('@')) {
+      return res.status(400).json({
+        error: 'Invalid email address',
+        required: ['email']
+      } as ErrorResponse);
+    }
+    
+    // Save to Supabase
+    const success = await saveEmailToSupabase({
+      email,
+      project_name: projectName || 'No project name',
+      project_type: projectType || 'No project type',
+      features: selectedFeatures || [],
+      complexity: complexity || 0
+    });
+    
+    if (success) {
+      return res.status(200).json({
+        status: 'success',
+        message: 'Email saved successfully'
+      });
+    } else {
+      return res.status(500).json({
+        error: 'Failed to save email'
+      } as ErrorResponse);
+    }
+  } catch (error) {
+    logger.error('Error processing subscription:', error);
+    
+    res.status(500).json({ 
+      error: 'Failed to save email',
       message: error instanceof Error ? error.message : 'Unknown error'
     } as ErrorResponse);
   }
