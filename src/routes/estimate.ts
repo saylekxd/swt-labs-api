@@ -44,8 +44,7 @@ router.post('/estimate', async (req, res) => {
 
     Provide the response in Polish language in the following format (the price should change based on the project complexity):
 
-    Estimated Cost: 10,000 PLN - 15,000 PLN  
-    Brief explanation: The estimation is based on project complexity, selected features, and timeline.`;
+    Estimated Cost: 10,000 PLN - 15,000 PLN `;
 
     const openai = new OpenAI({
       apiKey: config.openai.apiKey,
