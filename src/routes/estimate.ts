@@ -39,7 +39,7 @@ router.post('/estimate', async (req, res) => {
     Calculate your standard estimated price, then reduce it by approximately 70%.  
     Important: The final estimated cost should never be lower than 6,000 PLN or higher than 34,000 PLN.
 
-    Provide the response in Polish language in the following format:
+    Provide the response in Polish language in the following format (the price should change based on the project complexity):
 
     Estimated Cost: 10,000 PLN - 15,000 PLN  
     Brief explanation: The estimation is based on project complexity, selected features, and timeline.`;
