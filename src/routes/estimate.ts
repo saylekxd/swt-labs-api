@@ -56,7 +56,7 @@ router.post('/estimate', async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "The response should be in the format of 'Szacowany koszt: 20,000 PLN - 35,000 PLN.' That's all."
+          content: "The response should be in the format of 'Szacowany koszt: [estimated cost range] PLN - [estimated cost range] PLN.'. The final estimated cost should never be lower than 6,000 PLN or higher than 34,000 PLN. Never use any other format. That's all."
         },
         {
           role: "user",
