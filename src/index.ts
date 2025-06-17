@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import session from 'express-session';
 import { config, validateConfig } from './config';
 import { logger } from './utils/logger';
 import healthRoutes from './routes/health';
@@ -20,6 +21,18 @@ const app = express();
 app.use(cors(config.cors));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configure session middleware for blog authentication
+app.use(session({
+  secret: config.blog.adminKey || 'default-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
 
 // Log all requests
 app.use((req, res, next) => {

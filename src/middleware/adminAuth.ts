@@ -2,9 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { config } from '../config';
 import { logger } from '../utils/logger';
 
-export interface AuthenticatedRequest extends Request {
+export type AuthenticatedRequest = Request & {
   isAdmin?: boolean;
-}
+  session?: any;
+};
 
 /**
  * Middleware to check admin access via secret key
