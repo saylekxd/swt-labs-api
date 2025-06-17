@@ -4,7 +4,6 @@ import { logger } from '../utils/logger';
 
 export interface AuthenticatedRequest extends Request {
   isAdmin?: boolean;
-  session?: any; // Express session (add proper session types if needed)
 }
 
 /**
