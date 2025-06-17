@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { config } from '../config';
 import { logger } from '../utils/logger';
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   isAdmin?: boolean;
   session?: any; // Express session (add proper session types if needed)
 }

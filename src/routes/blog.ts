@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { config } from '../config';
 import { logger } from '../utils/logger';
-import { checkAdminAccess, checkAdminOptional } from '../middleware/adminAuth';
+import { checkAdminAccess, checkAdminOptional, AuthenticatedRequest } from '../middleware/adminAuth';
 import {
   createBlogPost,
   updateBlogPost,
@@ -21,10 +21,6 @@ import {
 import type { Request, Response } from 'express';
 
 const router = Router();
-
-interface AuthenticatedRequest extends Request {
-  isAdmin?: boolean;
-}
 
 // Public routes (no authentication required)
 
