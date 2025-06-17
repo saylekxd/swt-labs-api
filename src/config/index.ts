@@ -15,9 +15,14 @@ export const config = {
   },
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? [process.env.FRONTEND_URL || '', 'https://*.netlify.app'] // Allow Netlify domains
+      ? [
+          process.env.FRONTEND_URL || '', 
+          'https://swtlabs.pl',
+          'https://www.swtlabs.pl',
+          'https://*.netlify.app'
+        ]
       : true,
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
     credentials: true
   } satisfies CorsOptions,
