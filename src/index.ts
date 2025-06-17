@@ -52,7 +52,30 @@ app.get('/', (req, res) => {
   res.status(200).json({
     status: 'ok',
     message: 'SWT Labs API is running',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    apiBase: `${req.protocol}://${req.get('host')}`,
+    endpoints: {
+      health: '/api/health',
+      estimate: '/api/estimate',
+      blog: '/api/blog',
+      blogAdmin: '/api/blog/admin'
+    }
+  });
+});
+
+// API discovery endpoint
+app.get('/api', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    message: 'SWT Labs API',
+    version: '1.0.0',
+    apiBase: `${req.protocol}://${req.get('host')}/api`,
+    endpoints: {
+      health: '/api/health',
+      estimate: '/api/estimate',
+      blog: '/api/blog',
+      blogAdmin: '/api/blog/admin'
+    }
   });
 });
 

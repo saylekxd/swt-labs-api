@@ -15,12 +15,28 @@ export const config = {
   },
   cors: {
     origin: process.env.NODE_ENV === 'production' 
-      ? [
-          process.env.FRONTEND_URL || '', 
-          'https://swtlabs.pl',
-          'https://www.swtlabs.pl',
-          'https://*.netlify.app'
-        ]
+      ? (origin, callback) => {
+          // Allow requests with no origin (like mobile apps or curl requests)
+          if (!origin) return callback(null, true);
+          
+          const allowedOrigins = [
+            process.env.FRONTEND_URL || '', 
+            'https://swtlabs.pl',
+            'https://www.swtlabs.pl'
+          ];
+          
+          // Check for Netlify domains
+          if (origin.includes('.netlify.app')) {
+            return callback(null, true);
+          }
+          
+          // Check for exact matches
+          if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+          }
+          
+          return callback(new Error('Not allowed by CORS'));
+        }
       : true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
