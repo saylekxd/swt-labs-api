@@ -37,6 +37,8 @@ app.use(session({
 // Log all requests
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.path}`, {
+    origin: req.headers.origin,
+    userAgent: req.headers['user-agent'],
     headers: req.headers,
     query: req.query,
     body: req.method === 'POST' ? req.body : undefined
