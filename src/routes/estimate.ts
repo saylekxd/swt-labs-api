@@ -44,7 +44,8 @@ router.post('/estimate', async (req, res) => {
 
     Provide the response in Polish language in the following format (the price should change based on the project complexity):
 
-    Estimated Cost: 10,000 PLN - 15,000 PLN `;
+    Estimated Cost: 10,000 PLN - 15,000 PLN  
+    Brief explanation: The estimation is based on project complexity, selected features, and timeline.`;
 
     const openai = new OpenAI({
       apiKey: config.openai.apiKey,
@@ -55,7 +56,7 @@ router.post('/estimate', async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "The response should be in the format of 'Szacowany koszt: [estimated cost range] PLN - [estimated cost range] PLN.' and in should be different based on the project complexity. The final estimated cost should never be lower than 6,000 PLN or higher than 34,000 PLN. Never use any other format. That's all."
+          content: "The response should be in the format of 'Szacowany koszt: [estimated cost range] PLN - [estimated cost range] PLN.'. The final estimated cost should never be lower than 6,000 PLN or higher than 34,000 PLN. Never use any other format. That's all."
         },
         {
           role: "user",

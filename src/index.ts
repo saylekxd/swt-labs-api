@@ -4,6 +4,7 @@ import { config, validateConfig } from './config';
 import { logger } from './utils/logger';
 import healthRoutes from './routes/health';
 import estimateRoutes from './routes/estimate';
+import blogRoutes from './routes/blog';
 
 // Validate configuration
 try {
@@ -45,6 +46,7 @@ app.get('/', (req, res) => {
 // Routes
 app.use('/api', healthRoutes);
 app.use('/api', estimateRoutes);
+app.use('/api/blog', blogRoutes);
 
 // Handle 404
 app.use((req, res) => {
@@ -68,4 +70,7 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 app.listen(config.port, () => {
   logger.info(`🚀 Server running on port ${config.port}`);
   logger.info(`📡 OpenAI API Key status: ${config.openai.apiKey ? '✅ Configured' : '❌ Missing'}`);
+  logger.info(`🤖 Gemini API Key status: ${config.gemini.apiKey ? '✅ Configured' : '❌ Missing'}`);
+  logger.info(`🔑 Blog Admin Key status: ${config.blog.adminKey ? '✅ Configured' : '❌ Missing'}`);
+  logger.info(`📝 Blog endpoints available at: /api/blog`);
 }); 

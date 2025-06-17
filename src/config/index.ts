@@ -25,6 +25,13 @@ export const config = {
     url: process.env.SUPABASE_URL || '',
     key: process.env.SUPABASE_ANON_KEY || '',
     emailsTable: process.env.SUPABASE_EMAILS_TABLE || 'user_emails'
+  },
+  gemini: {
+    apiKey: process.env.GEMINI_API_KEY || '',
+    model: 'gemini-1.5-flash' // Free tier model
+  },
+  blog: {
+    adminKey: process.env.BLOG_ADMIN_KEY || ''
   }
 };
 
@@ -42,5 +49,15 @@ export const validateConfig = () => {
     if (!config.supabase.key) {
       throw new Error('Supabase Anon Key is not configured');
     }
+  }
+  
+  // Validate Gemini API key for blog functionality
+  if (!config.gemini.apiKey) {
+    console.warn('Gemini API key is not configured. Blog AI features will not work.');
+  }
+  
+  // Validate blog admin key
+  if (!config.blog.adminKey) {
+    console.warn('Blog admin key is not configured. Admin features will not work.');
   }
 }; 
