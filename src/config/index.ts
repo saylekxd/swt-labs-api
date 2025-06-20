@@ -44,7 +44,7 @@ export const config = {
   } satisfies CorsOptions,
   supabase: {
     url: process.env.SUPABASE_URL || '',
-    key: process.env.SUPABASE_ANON_KEY || '',
+    key: process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || '',
     emailsTable: process.env.SUPABASE_EMAILS_TABLE || 'user_emails'
   },
   gemini: {
