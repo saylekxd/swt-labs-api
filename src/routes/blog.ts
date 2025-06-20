@@ -133,7 +133,7 @@ router.get('/admin/posts', checkAdminAccess, async (req: AuthenticatedRequest, r
  */
 router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { title, slug, content, excerpt, featured_image_url, published, tags } = req.body;
+    const { title, slug, content, excerpt, featured_image_url, published, status, tags } = req.body;
 
     // Validate required fields
     if (!title || !content) {
@@ -152,7 +152,7 @@ router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest,
       content,
       excerpt,
       featured_image_url,
-      published: published || false,
+      published: typeof published === 'boolean' ? published : status === 'published',
       tags: tags || []
     });
 
@@ -184,7 +184,12 @@ router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest,
 router.put('/admin/:id', checkAdminAccess, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const { status: updStatus, published: updPublished, ...other } = req.body;
+    // Convert status/published to consistent boolean
+    const updateData = {
+      ...other,
+      published: typeof updPublished === 'boolean' ? updPublished : updStatus === 'published'
+    };
 
     logger.info(`Admin updating blog post: ${id}`);
     
