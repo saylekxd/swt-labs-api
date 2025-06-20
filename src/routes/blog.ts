@@ -133,7 +133,7 @@ router.get('/admin/posts', checkAdminAccess, async (req: AuthenticatedRequest, r
  */
 router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { title, slug, content, excerpt, featured_image_url, published, status, tags } = req.body;
+    const { title, slug, content, excerpt, featured_image_url, featured_image, published, status, tags } = req.body;
 
     // Validate required fields
     if (!title || !content) {
@@ -151,7 +151,7 @@ router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest,
       slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       content,
       excerpt,
-      featured_image_url,
+      featured_image_url: featured_image_url || featured_image,
       published: typeof published === 'boolean' ? published : status === 'published',
       tags: tags || []
     });
@@ -184,11 +184,12 @@ router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest,
 router.put('/admin/:id', checkAdminAccess, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { status: updStatus, published: updPublished, published_at, ...other } = req.body;
+    const { status: updStatus, published: updPublished, published_at, featured_image, featured_image_url: updFUrl, ...other } = req.body;
     // Convert status/published to consistent boolean
     const updateData = {
       ...other,
-      published: typeof updPublished === 'boolean' ? updPublished : updStatus === 'published'
+      published: typeof updPublished === 'boolean' ? updPublished : updStatus === 'published',
+      featured_image_url: updFUrl || featured_image
     };
 
     logger.info(`Admin updating blog post: ${id}`);
