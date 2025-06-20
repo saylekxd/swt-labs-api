@@ -9,6 +9,7 @@ Node.js/Express backend providing AI-powered cost estimation services. Built wit
 - Structured logging with emoji indicators
 - CORS configuration for production/development environments
 - Environment variable management
+- AI-generated blog management (Gemini-powered)
 
 ## Technical Stack
 | Component          | Technology               |
@@ -17,6 +18,7 @@ Node.js/Express backend providing AI-powered cost estimation services. Built wit
 | Framework          | Express 4.x              |
 | Language           | TypeScript 5.x           |
 | AI Provider        | OpenAI API               |
+| AI Provider        | OpenAI API + Google Gemini |
 | Deployment         | Render.com               |
 | Monitoring         | Structured JSON logging  |
 | Database           | Supabase                 |
@@ -27,6 +29,12 @@ Node.js/Express backend providing AI-powered cost estimation services. Built wit
 | `/api/health`      | GET    | System health check + OpenAI status  |
 | `/api/estimate`    | POST   | AI-powered cost estimation           |
 | `/api/subscribe`   | POST   | Save user email to Supabase          |
+| `/api/blog`         | GET    | List published blog posts            |
+| `/api/blog/:slug`  | GET    | Fetch single blog post by slug       |
+| `/api/blog/admin/posts` | GET | Get all blog posts (admin)         |
+| `/api/blog/admin/create` | POST | Create a new blog post (admin)    |
+| `/api/blog/admin/:id` | PUT | Update blog post by ID (admin)      |
+| `/api/blog/admin/:id` | DELETE | Delete blog post by ID (admin)    |
 | `/`                | GET    | Basic service status                 |
 
 ## Supabase Setup
