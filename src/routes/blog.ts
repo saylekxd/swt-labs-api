@@ -184,7 +184,7 @@ router.post('/admin/create', checkAdminAccess, async (req: AuthenticatedRequest,
 router.put('/admin/:id', checkAdminAccess, async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { id } = req.params;
-    const { status: updStatus, published: updPublished, ...other } = req.body;
+    const { status: updStatus, published: updPublished, published_at, ...other } = req.body;
     // Convert status/published to consistent boolean
     const updateData = {
       ...other,
